@@ -1,0 +1,544 @@
+/* /Pages/Home.razor.rz.scp.css */
+/* ============================================================
+   طراحی دارک — آکاردئون با کارت‌های جداگانه
+   ============================================================ */
+
+/* انتخابگر * (Universal) — این قواعد رو روی همه‌ی عناصر داخل
+   .app-screen اعمال می‌کنه. */
+.app-screen[b-ivnty6op3h],
+.app-screen *[b-ivnty6op3h] {
+    /* فونت اختصاصی — اگه Calibri نبود، به فونت‌های بعدی سوییچ می‌کنه */
+    font-family: 'Calibri', 'Segoe UI', Tahoma, sans-serif;
+    /* box-sizing: border-box یعنی padding و border جزو عرض/ارتفاع
+       عنصر حساب می‌شن، نه اضافه بر اون. این کار محاسبات رو ساده می‌کنه. */
+    box-sizing: border-box;
+    /* حذف هایلایت آبی روی موبایل وقتی روی دکمه‌ها ضربه می‌زنی */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================================
+   کانتینر اصلی
+   ============================================================ */
+
+.app-screen[b-ivnty6op3h] {
+    /* --- متغیرهای CSS ---
+       با var() در جاهای دیگه استفاده می‌شن.
+       مزیت: یک‌جا تعریف می‌کنی، همه‌جا استفاده می‌کنی.
+       تابع clamp(min, preferred, max):
+         - مقدار واقعی بین min و max قرار می‌گیره
+         - مقدار preferred (مثلاً 2vw = 2% عرض صفحه) تعیین‌کننده است
+         - این یعنی ابعاد با اندازه‌ی صفحه تغییر می‌کنن (واکنش‌گرا) */
+
+    --bg: #0a0e1a; /* پس‌زمینه کل صفحه (تیره خیلی زیاد) */
+    --surface: #141a29; /* پس‌زمینه کارت‌ها */
+    --surface-2: #1c2334; /* پس‌زمینه هدرهای گروه (کمی روشن‌تر) */
+    --border: #232b3d; /* رنگ حاشیه */
+    --text: #e5e7eb; /* متن اصلی (سفید مایل به خاکستری) */
+    --text-dim: #9ca3af; /* متن کم‌رنگ‌تر (تب‌های غیرفعال) */
+    --text-faint: #6b7280; /* متن خیلی کم‌رنگ (تاریخ) */
+    --accent: #3b82f6; /* رنگ تیره‌ی آبی (تب فعال، اسپینر) */
+    --accent-2: #2563eb; /* آبی تیره‌تر برای گرادیان */
+    --price: #60a5fa; /* رنگ آبی روشن برای قیمت */
+
+    --pad: clamp(12px, 2.5vw, 20px); /* پدینگ عمومی */
+    --gap: clamp(8px, 1.4vw, 14px); /* فاصله بین بلوک‌ها */
+    --radius: clamp(12px, 1.4vw, 16px); /* گوشه‌های گرد */
+    /* ============================================================
+   اندازه فونت‌ها — رشد نرم و کنترل‌شده
+   ------------------------------------------------------------
+   فرمول: clamp(حداقل, (ضریب × vw) + مقدار پایه, حداکثر)
+   
+   مزیت این فرمول نسبت به vw تنها:
+   - vw تنها روی موبایل خیلی ریز و روی دسکتاپ خیلی درشت می‌شه
+   - ترکیب vw + px باعث رشد خطی و نرم می‌شه
+   - min و max از ریز/درشت شدن جلوگیری می‌کنه
+   ============================================================ */
+
+    --fs-title: clamp(14px, 1.1vw + 9px, 20px); /* عنوان گروه */
+    --fs-item: clamp(15px, 1.2vw + 10px, 21px); /* نام قلم */
+    --fs-price: clamp(13px, 1vw + 9px, 19px); /* قیمت */
+    --fs-date: clamp(11px, 0.6vw + 9px, 16px); /* تاریخ */
+    /*--fs-title: clamp(13px, 1.25vw, 15px);*/ /* فونت عنوان گروه */
+    /*--fs-item: clamp(14px, 1.4vw, 16px);*/ /* فونت نام قلم */
+    /*--fs-price: clamp(12px, 1.15vw, 14px);*/ /* فونت قیمت */
+    /*--fs-date: clamp(10px, 0.9vw, 11px);*/ /* فونت تاریخ */
+    /* --- چیدمان --- */
+    display: flex; /* چیدمان انعطاف‌پذیر */
+    flex-direction: column; /* فرزندان عمودی چیده می‌شن */
+    min-height: 100dvh; /* حداقل ارتفاع = 100% ارتفاع دید (dvh برای موبایل بهتره) */
+    background: var(--bg);
+    color: var(--text);
+    width: 100%;
+}
+
+/* ============================================================
+   هدر — تب‌ها
+   ============================================================ */
+
+.app-header[b-ivnty6op3h] {
+    /* position: sticky یعنی هنگام اسکرول، هدر بالای صفحه می‌مونه */
+    position: sticky;
+    top: 0; /* چسبیده به لبه‌ی بالا */
+    z-index: 10; /* بالاتر از بقیه (لایه‌بندی) */
+    background: var(--bg);
+    padding: var(--pad);
+    padding-bottom: clamp(8px, 1.4vw, 12px);
+}
+
+.header-tabs[b-ivnty6op3h] {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 6px; /* ⬅️ از 5px به 6px */
+    background: var(--surface);
+    border-radius: 14px;
+}
+
+/* --- دکمه‌ی هر تب --- */
+.tab[b-ivnty6op3h] {
+    /* چیدمان داخلی برای وسط‌چین کردن */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(10px, 1.5vw, 14px) clamp(8px, 1.5vw, 14px);
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: var(--text-dim);
+    font-family: inherit;
+    /* ⬇️ فونت بزرگ‌تر و واکنش‌گرا (قبلاً clamp(12px, 1.2vw, 14px) بود) */
+    font-size: clamp(14px, 1vw + 10px, 17px);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+    /* :hover — وقتی موس روی دکمه است */
+    .tab:hover[b-ivnty6op3h] {
+        color: var(--text);
+    }
+
+    /* .tab.active — تب فعال */
+    .tab.active[b-ivnty6op3h] {
+        /* linear-gradient(زاویه, رنگ1, رنگ2): گرادیان بین دو رنگ */
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35); /* سایه آبی محو */
+    }
+
+/* ============================================================
+   محتوای اصلی
+   ============================================================ */
+
+.app-content[b-ivnty6op3h] {
+    flex: 1; /* flex:1 یعنی بقیه فضای خالی رو پر کن */
+    padding: 0 var(--pad) calc(var(--pad) * 2); /* بالا 0، چپ/راست pad، پایین دوبرابر pad */
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+/* ============================================================
+   گروه (آکاردئون)
+   ============================================================ */
+
+.group[b-ivnty6op3h] {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* --- دکمه‌ی هدر گروه --- */
+/* ============================================================
+   هدر گروه (دکمه آکاردئون) — نسخه قطعی راست‌چین
+   ============================================================ */
+
+.group-header[b-ivnty6op3h] {
+    /* چیدمان افقی */
+    display: flex;
+    align-items: inherit;
+    justify-content: space-between;
+    gap: 12px;
+    padding: clamp(12px, 1.8vw, 16px) clamp(14px, 2vw, 18px);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* ⬇️ اصرار بر راست‌چین بودن */
+    direction: rtl;
+    text-align: right;
+}
+
+    .group-header:hover[b-ivnty6op3h] {
+        background: #212a3d;
+    }
+
+    .group-header.open[b-ivnty6op3h] {
+        background: linear-gradient(135deg, #1e293b 0%, #1a2333 100%);
+        border-color: #2d3a52;
+    }
+
+
+/* ظرف عنوان و آیکون */
+.group-right[b-ivnty6op3h] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1;
+    /* ⬇️ اصرار دوباره */
+    direction: rtl;
+    justify-content: flex-start; /* در RTL = راست */
+}
+
+.group-title[b-ivnty6op3h] {
+    font-size: var(--fs-title);
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.group-icon[b-ivnty6op3h] {
+    font-size: clamp(16px, 1.8vw, 20px);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* فلش (شِورون) — این در RTL می‌ره لبه چپ */
+.group-chevron[b-ivnty6op3h] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    transition: transform 0.3s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+    .group-chevron.up[b-ivnty6op3h] {
+        transform: rotate(90deg);
+        color: var(--accent);
+    }
+/* ============================================================
+   بدنه گروه (لیست کارت‌ها)
+   ============================================================ */
+
+.group-body[b-ivnty6op3h] {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* انیمیشن slideDown هنگام باز شدن */
+    animation: slideDown-b-ivnty6op3h 0.25s ease;
+}
+
+/* @keyframes: تعریف یک انیمیشن.
+   مراحل (from/to) رو مشخص می‌کنیم و مرورگر بین‌شون درون‌یابی می‌کنه. */
+@keyframes slideDown-b-ivnty6op3h {
+    from {
+        opacity: 0; /* شفافیت صفر (نامرئی) */
+        transform: translateY(-6px); /* ۶ پیکسل بالا */
+    }
+
+    to {
+        opacity: 1; /* کاملاً نمایان */
+        transform: translateY(0); /* مکان نهایی */
+    }
+}
+
+/* ============================================================
+   کارت هر قلم
+   ============================================================ */
+
+.item-card[b-ivnty6op3h] {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: clamp(14px, 2vw, 18px) clamp(14px, 2vw, 18px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-align: right;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+    .item-card:hover[b-ivnty6op3h] {
+        border-color: #2f3a52; /* حاشیه کمی روشن‌تر */
+    }
+
+    .item-card:active[b-ivnty6op3h] {
+        transform: scale(0.99); /* وقتی کلیک می‌کنی، کمی فشرده می‌شه (بازخورد لمسی) */
+    }
+
+/* نام قلم */
+.item-name[b-ivnty6op3h] {
+    font-size: var(--fs-item);
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.35;
+    word-break: break-word; /* اگه کلمه طولانی بود، بشکنه */
+}
+
+/* ردیف قیمت */
+.item-price[b-ivnty6op3h] {
+    display: flex;
+    align-items: baseline; /* هم‌تراز در خط پایه (برای متن با سایزهای مختلف) */
+    gap: 6px;
+    flex-wrap: wrap; /* اگه جا نشد، به خط بعد بره */
+    color: var(--price);
+    font-size: var(--fs-price);
+    font-weight: 600;
+    direction: rtl;
+}
+
+.price-num[b-ivnty6op3h] {
+    font-weight: 700;
+    direction: ltr; /* عدد چپ‌به‌راست */
+    unicode-bidi: embed; /* جداسازی جهت‌نمایی عدد از متن فارسی اطراف */
+}
+
+.price-sep[b-ivnty6op3h] {
+    color: var(--text-faint);
+    font-weight: 400;
+}
+
+.price-unit[b-ivnty6op3h] {
+    color: var(--price);
+}
+
+/* تاریخ */
+.item-date[b-ivnty6op3h] {
+    font-size: var(--fs-date);
+    color: var(--text-faint);
+    margin-top: 2px;
+}
+
+/* ============================================================
+   حالت بارگذاری
+   ============================================================ */
+
+.state-box[b-ivnty6op3h] {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.spinner[b-ivnty6op3h] {
+    width: 36px;
+    height: 36px;
+    /* border: 3px solid رنگ — یک حاشیه دایره‌ای کامل */
+    border: 3px solid var(--surface-2);
+    /* border-top-color — فقط بالای دایره رنگ متفاوت.
+       حالا وقتی می‌چرخه، انگار یک قطاع رنگی داره می‌چرخه. */
+    border-top-color: var(--accent);
+    border-radius: 50%; /* دایره کامل */
+    animation: spin-b-ivnty6op3h 0.9s linear infinite; /* انیمیشن چرخش بی‌نهایت */
+}
+
+@keyframes spin-b-ivnty6op3h {
+    to {
+        transform: rotate(360deg);
+    }
+    /* یک دور کامل چرخش */
+}
+/* ============================================================
+   ورودی ویرایش قیمت درجا (Inline Price Editor)
+   ============================================================ */
+
+/* نشانگر کلیک‌پذیر برای قیمت — خط‌چین محو در حالت هاور */
+.price-num[b-ivnty6op3h] {
+    cursor: pointer;
+    border-bottom: 1px dashed transparent;
+    transition: border-color 0.2s ease, color 0.15s ease;
+    padding-bottom: 1px;
+}
+
+    .price-num:hover[b-ivnty6op3h] {
+        border-bottom-color: var(--accent);
+        color: #93c5fd; /* کمی روشن‌تر */
+    }
+
+    .price-num:active[b-ivnty6op3h] {
+        color: #bfdbfe;
+    }
+/* ورودی ویرایش قیمت */
+.price-input[b-ivnty6op3h] {
+    width: clamp(90px, 13vw, 120px);
+    padding: 5px 10px;
+    background: var(--surface-2);
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    color: var(--price);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    direction: ltr; /* عدد چپ‌به‌راست */
+    unicode-bidi: embed;
+    transition: box-shadow 0.15s ease;
+}
+
+    .price-input:focus[b-ivnty6op3h] {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+/* رنگ متن "تومان" کنار قیمت */
+.price-currency[b-ivnty6op3h] {
+    color: var(--price);
+    font-size: var(--fs-price);
+    font-weight: 600;
+}
+/* ============================================================
+   تب برآورد قیمت (Estimate)
+   ============================================================ */
+
+.estimate-container[b-ivnty6op3h] {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 2rem;
+}
+
+/* کارت ورودی متراژ */
+.estimate-input-card[b-ivnty6op3h] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+    .estimate-input-card label[b-ivnty6op3h] {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-dim);
+    }
+
+/* گروه ورودی با دکمه‌های + و - */
+.input-group[b-ivnty6op3h] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.btn-step[b-ivnty6op3h] {
+    background: var(--surface-2);
+    color: var(--text);
+    border: none;
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+    .btn-step:hover[b-ivnty6op3h] {
+        background: var(--border);
+    }
+
+.meter-input[b-ivnty6op3h] {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    width: 100%;
+}
+
+/* کارت قیمت نهایی */
+.result-card[b-ivnty6op3h] {
+    background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+}
+
+.result-header[b-ivnty6op3h] {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.result-price[b-ivnty6op3h] {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 800;
+    direction: ltr;
+}
+
+    .result-price span[b-ivnty6op3h] {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+.result-sub[b-ivnty6op3h] {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-top: 8px;
+}
+
+/* کارت ریز هزینه‌ها */
+.breakdown-card[b-ivnty6op3h] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+}
+
+    .breakdown-card h3[b-ivnty6op3h] {
+        font-size: 1rem;
+        color: var(--text);
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+    }
+
+.breakdown-row[b-ivnty6op3h] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+    .breakdown-row:not(:last-child)[b-ivnty6op3h] {
+        border-bottom: 1px dashed var(--surface-2);
+    }
+
+    .breakdown-row span:last-child[b-ivnty6op3h] {
+        font-family: 'Calibri', sans-serif;
+        direction: ltr;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .breakdown-row.highlight[b-ivnty6op3h] {
+        color: var(--accent);
+        font-weight: 700;
+        padding-top: 16px;
+    }
+
+        .breakdown-row.highlight span:last-child[b-ivnty6op3h] {
+            color: var(--accent);
+        }
